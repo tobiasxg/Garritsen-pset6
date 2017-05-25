@@ -2,6 +2,7 @@ package com.example.tobias.firebase_pset6;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -30,12 +31,13 @@ import java.util.Map;
 public class SocialActivity extends AppCompatActivity {
 
     private FirebaseAuth authTest;
-    private FirebaseAuth.AuthStateListener authStateListener;
+//    private FirebaseAuth.AuthStateListener authStateListener;
     private static final String TAG = "Firebase_bored";
     private DatabaseReference mDatabase;
     String user;
+//    String email;
     int incremental = 1;
-    private static final String FIREBASE_BOARD = "message";
+//    private static final String FIREBASE_BOARD = "message";
     private static final String FIREBASE_USERS = "users";
 
     String allBoredPeople = "loading$";
@@ -50,7 +52,9 @@ public class SocialActivity extends AppCompatActivity {
         setContentView(R.layout.activity_social);
 
         Bundle extras = getIntent().getExtras();
-        user = extras.getString("user");
+        user = extras.getString("email");
+//        user = extras.getString("username");
+
 
         authTest = FirebaseAuth.getInstance();
 //        setListener();
@@ -118,7 +122,7 @@ public class SocialActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 allBoredPeople = dataSnapshot.child(FIREBASE_USERS).child("bored").getValue(String.class);
 
-                Toast.makeText(SocialActivity.this, allBoredPeople, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(SocialActivity.this, allBoredPeople, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -172,6 +176,10 @@ public class SocialActivity extends AppCompatActivity {
             TextView titleView = (TextView) view;
             String boredUser = titleView.getText().toString();
             Toast.makeText(SocialActivity.this, boredUser, Toast.LENGTH_SHORT).show();
+            Intent profileIntent = new Intent(getApplicationContext(), ProfileActivity.class);
+            profileIntent.putExtra("email", user);
+            profileIntent.putExtra("profile", boredUser);
+            startActivity(profileIntent);
         }
     }
 

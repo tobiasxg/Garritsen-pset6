@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/black"
+    tools:context="com.example.tobias.firebase_pset6.ProfileActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/friendEmail"
+        android:text="EMAIL"
+        android:textSize="30dp"
+        android:textColor="@color/white"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/messageList"
+        android:background="@color/white"
+        android:layout_weight="1">
+
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="290dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="write a message"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:id="@+id/etmessage"/>
+
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="sendMessage"
+            android:text="SEND" />
+    </LinearLayout>
+
+</LinearLayout>

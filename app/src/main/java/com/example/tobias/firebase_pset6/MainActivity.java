@@ -14,11 +14,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private static final String ACCOUNT_TAG = "accounts";
 
     String TAG = "this is a tag";
     String email;
@@ -66,7 +69,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void createUser(View view){
+
+    public void createUser(View view) {
+        Intent intent = new Intent(this, SignupActivity.class);
+        startActivity(intent);
+    }
+
+    public void createUserREPLACED(View view){
         EditText emailET = (EditText) findViewById(R.id.etname);
         EditText passET = (EditText) findViewById(R.id.etpass);
 
@@ -91,7 +100,9 @@ public class MainActivity extends AppCompatActivity {
 
                         // ...
                     }
+
                 });
+        accountInfo(email);
     }
 
     public void fastLogIn(View view){
@@ -135,8 +146,10 @@ public class MainActivity extends AppCompatActivity {
         if(logged){
 //            Intent intent = new Intent(this, LoadActivity.class);
             Intent intent = new Intent(this, SocialActivity.class);
-            intent.putExtra("user", email);
+            intent.putExtra("email", email);
+//            intent.putExtra("username", user);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -158,5 +171,21 @@ public class MainActivity extends AppCompatActivity {
 
         logIn(view);
     }
+
+    public void accountInfo(String mail){
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference myRef = database.getReference(ACCOUNT_TAG);
+//        myRef.child(mail).child("username").setValue(mail);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference(ACCOUNT_TAG);
+
+        String realMail = mail;
+        mail = mail.replace("@","");
+        mail = mail.replace(".","");
+        myRef.child(mail.toLowerCase()).setValue(realMail);
+
+
+    }
+
 
 }
