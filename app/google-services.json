@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "574668090736",
+    "firebase_url": "https://poging2-6b2be.firebaseio.com",
+    "project_id": "poging2-6b2be",
+    "storage_bucket": "poging2-6b2be.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574668090736:android:60e9c63f33d34315",
+        "android_client_info": {
+          "package_name": "com.example.tobias.firebase_pset6"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "574668090736-lu850269vag6np6t6n9j1lvjg14ej98b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tobias.firebase_pset6",
+            "certificate_hash": "efa9b07a37eff1374b15a9e018910fc58f7c5f7b"
+          }
+        },
+        {
+          "client_id": "574668090736-2aubd7qqfbkq56quc9u5tlb80smrr41d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMZn8r_qxHWW_I9mYeV29fhS_SOKncRUI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "574668090736-2aubd7qqfbkq56quc9u5tlb80smrr41d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

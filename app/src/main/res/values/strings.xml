@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Firebase-pset6</string>
+    <string name="title_activity_social">SocialActivity</string>
+    <string name="title_activity_load">LoadActivity</string>
+</resources>
