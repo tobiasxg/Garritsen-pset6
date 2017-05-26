@@ -1,14 +1,9 @@
 package com.example.tobias.firebase_pset6;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -16,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,11 +20,16 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/*
+ * In this activity the user can send messages to another user.
+ * The user is able to see what messages he send and what the other user send.
+ * The order of the messages is chronological.
+ * The messages are saved in two paths in Firebase, the path of person A to person B and vice versa.
+ */
+
 public class ProfileActivity extends AppCompatActivity {
 
     private FirebaseAuth authTest;
-    //    private FirebaseAuth.AuthStateListener authStateListener;
-    private static final String TAG = "Firebase_bored";
     private DatabaseReference mDatabase;
     private static final String FIREBASE_ACCOUNTS = "message";
 
@@ -41,75 +40,74 @@ public class ProfileActivity extends AppCompatActivity {
     String user;
     String profilePerson;
     String mail;
-    String uMail;
-
+    String userMail;
     String messageDatabase = "loading";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        // Get data from previous intent and set profile name
         Bundle extras = getIntent().getExtras();
         user = extras.getString("email");
         profilePerson = extras.getString("profile");
         TextView boredET = (TextView) findViewById(R.id.friendEmail);
         boredET.setText(profilePerson);
 
+        // Make emails readable for firebase paths
         mail = profilePerson;
         mail = mail.replace("@","");
         mail = mail.replace(".","");
-        uMail = user;
-        uMail = uMail.replace("@","");
-        uMail = uMail.replace(".","");
+        userMail = user;
+        userMail = userMail.replace("@","");
+        userMail = userMail.replace(".","");
 
         authTest = FirebaseAuth.getInstance();
-//        setListener();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-//        getBoredPeople();
+
         getMessageData();
-        Toast.makeText(ProfileActivity.this, messageDatabase, Toast.LENGTH_SHORT).show();
-
-
-
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = authTest.getCurrentUser();
     }
 
+//     Send private message to person on whose profile you are
     public void sendMessage(View view){
         EditText messageET = (EditText) findViewById(R.id.etmessage);
         String message = messageET.getText().toString();
-        fireBaseSend(message);
-        Toast.makeText(ProfileActivity.this, messageDatabase, Toast.LENGTH_SHORT).show();
-
+        getMessageData();
+        if(message.length() > 0) {
+            fireBaseSend(message);
+        }
+        messageET.setText("");
     }
 
+//    Get and update database with send message
     public void fireBaseSend(String message){
-        getMessageData();
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
         String messageToSend = message + "***" + user;
         DatabaseReference myRef = database.getReference(FIREBASE_ACCOUNTS);
-        myRef.child(uMail).child(mail).setValue(messageToSend+"$$$"+messageDatabase);
-        myRef.child(mail).child(uMail).setValue(messageToSend+"$$$"+messageDatabase);
+        myRef.child(userMail).child(mail).setValue(messageToSend+"$$$"+messageDatabase);
+        myRef.child(mail).child(userMail).setValue(messageToSend+"$$$"+messageDatabase);
         getMessageData();
 
-        createListView();
-        adapter.notifyDataSetChanged();
-
+        if(messageDatabase.length() > 0){
+            createListView();
+            adapter.notifyDataSetChanged();
+        }
     }
 
+//    Get the current database from firebase with all relevent messages
     public void getMessageData(){
-
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                messageDatabase = dataSnapshot.child(FIREBASE_ACCOUNTS).child(mail).child(uMail).getValue(String.class);
+                messageDatabase = dataSnapshot.child(FIREBASE_ACCOUNTS).child(mail).child(userMail).getValue(String.class);
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -117,18 +115,25 @@ public class ProfileActivity extends AppCompatActivity {
             }
         };
         mDatabase.addValueEventListener(postListener);
+
+        if (messageDatabase == null){
+            messageDatabase = "";
+        }
     }
 
+//    Create ListView to show send and received messages
+//    These messages should be split on all different messages
+//    They should also be split on a different "split sign" as the second part indicates
+//    who had send the message
     public void createListView(){
         String[] messages = messageDatabase.split("\\$\\$\\$");
         ArrayList<String> messagesList = new ArrayList<>(Arrays.asList(messages));
-//        boredUsersForList.remove(0);
-//        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, messagesList);
-        adapter =
-                new ArrayAdapter<String>(getApplicationContext(),
+        adapter = new ArrayAdapter<String>(getApplicationContext(),
                         android.R.layout.simple_list_item_1,
                         messagesList) {
 
+                    // All items in list are given a color to indicate who had send the message
+                    // by checking if the second substring links to the user or the other person
                     @Override
                     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -138,10 +143,13 @@ public class ProfileActivity extends AppCompatActivity {
                         String[] textWithId = text.getText().toString().split("\\*\\*\\*");
                         text.setText(textWithId[0]);
                         if (textWithId[1].equals(user)) {
-                            text.setTextColor(Color.BLUE);
+                            text.setTextColor(getResources().getColor(R.color.black));
+                            text.setBackgroundColor(getResources().getColor(R.color.red));
                         } else {
-                            text.setTextColor(Color.BLACK);
+                            text.setTextColor(getResources().getColor(R.color.red));
+                            text.setBackgroundColor(getResources().getColor(R.color.black));
                         }
+                        text.setTextSize(30);
 
                         return view;
                     }
@@ -150,18 +158,6 @@ public class ProfileActivity extends AppCompatActivity {
         viewList = (ListView) findViewById(R.id.messageList);
         assert viewList != null;
         viewList.setAdapter(adapter);
-
-        AdapterView.OnItemClickListener boredListener = new MessageListener();
-
-        viewList.setOnItemClickListener(boredListener);
-
-    }
-
-    private class MessageListener implements AdapterView.OnItemClickListener {
-        public void onItemClick(AdapterView parent, View view, int position, long id) {
-            TextView titleView = (TextView) view;
-            String boredUser = titleView.getText().toString();
-        }
     }
 
 }

@@ -2,12 +2,7 @@ package com.example.tobias.firebase_pset6;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,25 +20,29 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
+
+/*
+ * This is the most important part of the app.
+ * When a user is bored he can press a button to let the world know that he is bored.
+ * This will be put in Firebase so other users can see him standing in the "Bored" list.
+ * From this activity you can choose a person who is bored and start a chat with him.
+ * This is done by pressing the person in the list after which you will go to the profile activity.
+ * Of course someone that is not bored anymore, can press a button to be removed from the list.
+ * It is necessary to update the app manually, but this is yet to be fixed to work with real time.
+ */
 
 public class SocialActivity extends AppCompatActivity {
 
     private FirebaseAuth authTest;
-//    private FirebaseAuth.AuthStateListener authStateListener;
-    private static final String TAG = "Firebase_bored";
     private DatabaseReference mDatabase;
-    String user;
-//    String email;
-    int incremental = 1;
-//    private static final String FIREBASE_BOARD = "message";
     private static final String FIREBASE_USERS = "users";
 
+    String userEmail;
     String allBoredPeople = "loading$";
 
-    ListView viewList;
-
     ArrayAdapter adapter;
+
+    ListView viewList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,14 +50,10 @@ public class SocialActivity extends AppCompatActivity {
         setContentView(R.layout.activity_social);
 
         Bundle extras = getIntent().getExtras();
-        user = extras.getString("email");
-//        user = extras.getString("username");
-
+        userEmail = extras.getString("email");
 
         authTest = FirebaseAuth.getInstance();
-//        setListener();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-//        getBoredPeople();
 
         createListView();
         adapter.notifyDataSetChanged();
@@ -67,80 +61,57 @@ public class SocialActivity extends AppCompatActivity {
             allBoredPeople = allBoredPeople.replace("loading$","");
         }
 
+        updateListView();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = authTest.getCurrentUser();
     }
 
-    public void iAmBored(View view){
+//    Button for adding bored user to database
+    public void iAmBoredButton(View view){
         boredButtons(true);
-//        myRef2.child("bored").setValue(allBoredPeople+"$"+user);
-        createListView();
-//        Intent i = new Intent(getApplicationContext(), SocialActivity.class);
-////            i.putExtra("title", title);
-//        startActivity(i);
-//        finish();
-        adapter.notifyDataSetChanged();
+        updateListView();
     }
 
-    public void iAmNotBored(View view){
+//    Button for removing bored user from database
+    public void iAmNotBoredButton(View view){
         boredButtons(false);
-//        myRef2.child("bored").setValue(allBoredPeople);
-        createListView();
-        adapter.notifyDataSetChanged();
+        updateListView();
     }
 
+//    Code for both removing and adding bored user from database
+//    First get from the database the bored users as it is
+//    Afterwards either add or remove user, depending on given boolean
     public void boredButtons(boolean boredOrNot){
-        // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference(FIREBASE_BOARD);
-//        myRef.child(Integer.toString(incremental)).child("status").setValue(user+" not_bored");
 
         getBoredPeople();
-        if(allBoredPeople.contains(user)){
-            allBoredPeople = allBoredPeople.replace(user+"$","");
+        if(allBoredPeople.contains(userEmail)){
+            allBoredPeople = allBoredPeople.replace(userEmail+"$","");
         }
 
-        DatabaseReference myRef2 = database.getReference(FIREBASE_USERS);
+        DatabaseReference myRef = database.getReference(FIREBASE_USERS);
         if(boredOrNot) {
-            myRef2.child("bored").setValue(user+"$"+allBoredPeople);//+"$"+user);
+            myRef.child("bored").setValue(userEmail+"$"+allBoredPeople);
         } else {
-            myRef2.child("bored").setValue(allBoredPeople);
-
+            myRef.child("bored").setValue(allBoredPeople);
         }
-
     }
 
-    public void testBored(View view){
-        ValueEventListener postListener = new ValueEventListener() {
+//    Load the database with bored people
+//    Must be done to enable user to change database
+    public void loadBoredPeopleButton(View view){
+        updateListView();
 
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                allBoredPeople = dataSnapshot.child(FIREBASE_USERS).child("bored").getValue(String.class);
-
-//                Toast.makeText(SocialActivity.this, allBoredPeople, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-        mDatabase.addValueEventListener(postListener);
-
-        createListView();
-        adapter.notifyDataSetChanged();
-
-        Button boredBut = (Button) findViewById(R.id.boredBut);
-        Button notBoredBut = (Button) findViewById(R.id.notBoredBut);
-        boredBut.setEnabled(true);
-        notBoredBut.setEnabled(true);
+        Button boredButton = (Button) findViewById(R.id.boredBut);
+        Button notBoredButton = (Button) findViewById(R.id.notBoredBut);
+        boredButton.setEnabled(true);
+        notBoredButton.setEnabled(true);
     }
 
+    // Get the variable allBoredPeople to be used everywhere in the class
     public void getBoredPeople(){
         ValueEventListener postListener = new ValueEventListener() {
             @Override
@@ -155,10 +126,11 @@ public class SocialActivity extends AppCompatActivity {
         mDatabase.addValueEventListener(postListener);
     }
 
+//    Create the ListView with all bored users
+//    The variable with all bored users must be split to differentiate between users
     public void createListView(){
         String[] boredUsers = allBoredPeople.split("\\$");
         ArrayList<String> boredUsersForList = new ArrayList<>(Arrays.asList(boredUsers));
-//        boredUsersForList.remove(0);
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, boredUsersForList);
 
         viewList = (ListView) findViewById(R.id.boredList);
@@ -171,19 +143,34 @@ public class SocialActivity extends AppCompatActivity {
 
     }
 
+//    Clicking on a bored user will lead to the profile of the user, for further actions
     private class BoredListener implements AdapterView.OnItemClickListener {
         public void onItemClick(AdapterView parent, View view, int position, long id) {
             TextView titleView = (TextView) view;
             String boredUser = titleView.getText().toString();
-            Toast.makeText(SocialActivity.this, boredUser, Toast.LENGTH_SHORT).show();
             Intent profileIntent = new Intent(getApplicationContext(), ProfileActivity.class);
-            profileIntent.putExtra("email", user);
+            profileIntent.putExtra("email", userEmail);
             profileIntent.putExtra("profile", boredUser);
             startActivity(profileIntent);
         }
     }
 
-//    private void setListener(){
-//        authStateListener = (FirebaseAuth.AuthStateListener) (firebaseAuth)
-//    }
+//    Update the ListView to the most recent found database
+    public void updateListView(){
+        ValueEventListener postListener = new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                allBoredPeople = dataSnapshot.child(FIREBASE_USERS).child("bored").getValue(String.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(SocialActivity.this, "Database Error", Toast.LENGTH_SHORT).show();
+            }
+        };
+        mDatabase.addValueEventListener(postListener);
+        createListView();
+        adapter.notifyDataSetChanged();
+    }
 }

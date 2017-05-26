@@ -3,10 +3,7 @@ package com.example.tobias.firebase_pset6;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -20,21 +17,26 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+/*
+ * In this activity a user can create an account to log in and use the app.
+ * The user creates an account with the use of an email and password and creates a unique name.
+ * After this the user is referred back to the log in page to log in with his new account.
+ */
+
 public class SignupActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private static final String ACCOUNT_TAG = "accounts";
 
-    String TAG = "this is a tag";
     String email;
     String password;
+    String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        email = "new@app.com";
-        password = "wachtwoord";
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -44,12 +46,11 @@ public class SignupActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    Log.d("signed in", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                    Log.d("signed out", "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
     }
@@ -72,48 +73,44 @@ public class SignupActivity extends AppCompatActivity {
     public void createUser(View view){
         EditText emailET = (EditText) findViewById(R.id.etmailreg);
         EditText passET = (EditText) findViewById(R.id.etpassreg);
+        EditText usernameET = (EditText) findViewById(R.id.etnamereg);
 
         email = emailET.getText().toString();
         password = passET.getText().toString();
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+        username = usernameET.getText().toString();
+        if(email.length() > 0 && password.length() > 0 && username.length() > 0) {
 
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(SignupActivity.this, "Authentication failed",
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(SignupActivity.this, "Authentication successful",
-                                    Toast.LENGTH_SHORT).show();
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            Log.d("username created", "createUserWithEmail:onComplete:" + task.isSuccessful());
+
+                            // If sign in fails, display a message to the user. If sign in succeeds
+                            // the auth state listener will be notified and logic to handle the
+                            // signed in user can be handled in the listener.
+                            if (!task.isSuccessful()) {
+                                Toast.makeText(SignupActivity.this, "Authentication failed",
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(SignupActivity.this, "Authentication successful",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
 
-                        // ...
-                    }
-
-                });
-        accountInfo(email);
+                    });
+            accountInfo(email);
+        }
     }
 
+//    Save account information in Firebase and return to log in page.
     public void accountInfo(String mail){
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference(ACCOUNT_TAG);
-//        myRef.child(mail).child("username").setValue(mail);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(ACCOUNT_TAG);
-
-
-        EditText usernameET = (EditText) findViewById(R.id.etnamereg);
-        String username = usernameET.getText().toString();
         myRef.child(username).setValue(mail);
 
-
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        Intent toLogInIntent = new Intent(this, MainActivity.class);
+        startActivity(toLogInIntent);
 
     }
 }
