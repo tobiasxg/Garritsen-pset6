@@ -31,7 +31,6 @@ import java.util.Arrays;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private FirebaseAuth authTest;
     private DatabaseReference mDatabase;
     private static final String firebaseAccounts = "message";
 
@@ -39,10 +38,11 @@ public class ProfileActivity extends AppCompatActivity {
 
     ArrayAdapter adapter;
 
+    // User and profile persons mail and path in Firebase
     String user;
+    String userMail;
     String profilePerson;
     String mail;
-    String userMail;
     String messageDatabase = "loading";
 
     @Override
@@ -54,7 +54,6 @@ public class ProfileActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         user = extras.getString("email");
         profilePerson = extras.getString("profile");
-//        messageDatabase = extras.getString("chatData");
         TextView boredField = (TextView) findViewById(R.id.friendEmail);
         boredField.setText(profilePerson);
 
@@ -66,7 +65,6 @@ public class ProfileActivity extends AppCompatActivity {
         userMail = userMail.replace("@","");
         userMail = userMail.replace(".","");
 
-        authTest = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         getMessageData();
@@ -174,7 +172,4 @@ public class ProfileActivity extends AppCompatActivity {
         Button sendButton = (Button) findViewById(R.id.button2);
         sendButton.setEnabled(true);
     }
-
-
-
 }

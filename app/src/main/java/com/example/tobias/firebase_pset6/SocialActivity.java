@@ -33,11 +33,14 @@ import java.util.Arrays;
 
 public class SocialActivity extends AppCompatActivity {
 
-    private FirebaseAuth authTest;
     private DatabaseReference mDatabase;
+
+    // part of the path for Firebase
     private static final String firebaseUsers = "users";
 
     String userEmail;
+
+    // All people from the database that are bored
     String allBoredPeople = "loading$";
 
     ArrayAdapter adapter;
@@ -52,7 +55,6 @@ public class SocialActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("email");
 
-        authTest = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         createListView();

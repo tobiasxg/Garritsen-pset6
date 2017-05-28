@@ -26,12 +26,14 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
+    // users email and password
     String userEmail;
     String password;
 
     EditText emailField;
     EditText passField;
 
+    // check if user is successfully logged in
     boolean loggedIn = false;
 
     @Override
@@ -117,21 +119,21 @@ public class MainActivity extends AppCompatActivity {
 
 //    Easy log in button for testing. This is temporary and only for the demo.
     public void fastLogIn2(View view){
-        emailField = (EditText) findViewById(R.id.etname);
-        passField = (EditText) findViewById(R.id.etpass);
-        emailField.setText("piet@yahoo.nl");
-        passField.setText("1234567890");
-
+        logIn("piet@yahoo.nl", "1234567890");
         logIn(view);
     }
+    
 //    Easy log in button for testing. This is temporary and only for the demo.
     public void fastLogIn3(View view){
+        logIn("tob@tobi.tg", "1234567890");
+        logIn(view);
+    }
+
+    public void logIn(String email, String pass){
         emailField = (EditText) findViewById(R.id.etname);
         passField = (EditText) findViewById(R.id.etpass);
-        emailField.setText("tob@tobi.tg");
-        passField.setText("1234567890");
-
-        logIn(view);
+        emailField.setText(email);
+        passField.setText(pass);
     }
 
 }
