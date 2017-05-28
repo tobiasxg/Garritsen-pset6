@@ -16,6 +16,16 @@
         android:textSize="30dp"
         android:textColor="@color/red"/>
 
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:onClick="loadMessages"
+        android:textColor="@color/black"
+        android:background="@color/red"
+        android:text="LOAD" />
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -38,7 +48,6 @@
             android:textColor="@color/red"
             android:id="@+id/etmessage"
             android:layout_weight="0.7"/>
-
 
         <Button
             android:id="@+id/button2"

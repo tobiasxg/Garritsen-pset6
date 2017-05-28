@@ -27,7 +27,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private static final String ACCOUNT_TAG = "accounts";
+    private static final String accountTag = "accounts";
 
     String email;
     String password;
@@ -99,14 +99,14 @@ public class SignupActivity extends AppCompatActivity {
                         }
 
                     });
-            accountInfo(email);
+            saveInfo(email);
         }
     }
 
 //    Save account information in Firebase and return to log in page.
-    public void accountInfo(String mail){
+    public void saveInfo(String mail){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference(ACCOUNT_TAG);
+        DatabaseReference myRef = database.getReference(accountTag);
         myRef.child(username).setValue(mail);
 
         Intent toLogInIntent = new Intent(this, MainActivity.class);

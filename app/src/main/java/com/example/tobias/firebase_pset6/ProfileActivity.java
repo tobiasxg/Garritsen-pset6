@@ -1,10 +1,12 @@
 package com.example.tobias.firebase_pset6;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,7 +33,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private FirebaseAuth authTest;
     private DatabaseReference mDatabase;
-    private static final String FIREBASE_ACCOUNTS = "message";
+    private static final String firebaseAccounts = "message";
 
     ListView viewList;
 
@@ -52,8 +54,9 @@ public class ProfileActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         user = extras.getString("email");
         profilePerson = extras.getString("profile");
-        TextView boredET = (TextView) findViewById(R.id.friendEmail);
-        boredET.setText(profilePerson);
+//        messageDatabase = extras.getString("chatData");
+        TextView boredField = (TextView) findViewById(R.id.friendEmail);
+        boredField.setText(profilePerson);
 
         // Make emails readable for firebase paths
         mail = profilePerson;
@@ -76,13 +79,13 @@ public class ProfileActivity extends AppCompatActivity {
 
 //     Send private message to person on whose profile you are
     public void sendMessage(View view){
-        EditText messageET = (EditText) findViewById(R.id.etmessage);
-        String message = messageET.getText().toString();
+        EditText messageField = (EditText) findViewById(R.id.etmessage);
+        String message = messageField.getText().toString();
         getMessageData();
         if(message.length() > 0) {
             fireBaseSend(message);
         }
-        messageET.setText("");
+        messageField.setText("");
     }
 
 //    Get and update database with send message
@@ -91,10 +94,11 @@ public class ProfileActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
         String messageToSend = message + "***" + user;
-        DatabaseReference myRef = database.getReference(FIREBASE_ACCOUNTS);
-        myRef.child(userMail).child(mail).setValue(messageToSend+"$$$"+messageDatabase);
-        myRef.child(mail).child(userMail).setValue(messageToSend+"$$$"+messageDatabase);
-        getMessageData();
+        String updatedFirebase = messageToSend+"$$$"+messageDatabase;
+        DatabaseReference myRef = database.getReference(firebaseAccounts);
+        myRef.child(userMail).child(mail).setValue(updatedFirebase);
+        myRef.child(mail).child(userMail).setValue(updatedFirebase);
+        messageDatabase = updatedFirebase;
 
         if(messageDatabase.length() > 0){
             createListView();
@@ -107,7 +111,7 @@ public class ProfileActivity extends AppCompatActivity {
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                messageDatabase = dataSnapshot.child(FIREBASE_ACCOUNTS).child(mail).child(userMail).getValue(String.class);
+                messageDatabase = dataSnapshot.child(firebaseAccounts).child(mail).child(userMail).getValue(String.class);
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -115,7 +119,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
         };
         mDatabase.addValueEventListener(postListener);
-
         if (messageDatabase == null){
             messageDatabase = "";
         }
@@ -159,5 +162,20 @@ public class ProfileActivity extends AppCompatActivity {
         assert viewList != null;
         viewList.setAdapter(adapter);
     }
+
+//    Load the database with messages
+//    Must be done to enable user to send messages
+    public void loadMessages(View view){
+        getMessageData();
+        if (messageDatabase.length() > 7) {
+            createListView();
+            adapter.notifyDataSetChanged();
+
+            Button sendButton = (Button) findViewById(R.id.button2);
+            sendButton.setEnabled(true);
+        }
+    }
+
+
 
 }

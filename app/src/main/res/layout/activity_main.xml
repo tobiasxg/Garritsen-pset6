@@ -21,13 +21,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name: "
+        android:text="Email: "
         android:textSize="30dp"/>
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="loginname"
+        android:hint="loginmail"
         android:gravity="center"
         android:textSize="30dp"
         android:id="@+id/etname"/>

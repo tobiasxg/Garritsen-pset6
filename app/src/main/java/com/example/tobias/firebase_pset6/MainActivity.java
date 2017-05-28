@@ -29,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
     String userEmail;
     String password;
 
+    EditText emailField;
+    EditText passField;
+
     boolean loggedIn = false;
 
     @Override
@@ -76,11 +79,11 @@ public class MainActivity extends AppCompatActivity {
 //    Log in by filling in email and password (both must be filled in)
 //    Afterwards go to the main page or social page of the app
     public void logIn(View view){
-        EditText emailET = (EditText) findViewById(R.id.etname);
-        EditText passET = (EditText) findViewById(R.id.etpass);
+        emailField = (EditText) findViewById(R.id.etname);
+        passField = (EditText) findViewById(R.id.etpass);
 
-        userEmail = emailET.getText().toString();
-        password = passET.getText().toString();
+        userEmail = emailField.getText().toString();
+        password = passField.getText().toString();
         if(userEmail.length() > 0 && password.length() > 0) {
 
             mAuth.signInWithEmailAndPassword(userEmail, password)
@@ -114,19 +117,19 @@ public class MainActivity extends AppCompatActivity {
 
 //    Easy log in button for testing. This is temporary and only for the demo.
     public void fastLogIn2(View view){
-        EditText emailET = (EditText) findViewById(R.id.etname);
-        EditText passET = (EditText) findViewById(R.id.etpass);
-        emailET.setText("piet@yahoo.nl");
-        passET.setText("1234567890");
+        emailField = (EditText) findViewById(R.id.etname);
+        passField = (EditText) findViewById(R.id.etpass);
+        emailField.setText("piet@yahoo.nl");
+        passField.setText("1234567890");
 
         logIn(view);
     }
 //    Easy log in button for testing. This is temporary and only for the demo.
     public void fastLogIn3(View view){
-        EditText emailET = (EditText) findViewById(R.id.etname);
-        EditText passET = (EditText) findViewById(R.id.etpass);
-        emailET.setText("tob@tobi.tg");
-        passET.setText("1234567890");
+        emailField = (EditText) findViewById(R.id.etname);
+        passField = (EditText) findViewById(R.id.etpass);
+        emailField.setText("tob@tobi.tg");
+        passField.setText("1234567890");
 
         logIn(view);
     }

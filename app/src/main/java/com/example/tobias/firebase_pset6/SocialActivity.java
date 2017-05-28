@@ -35,7 +35,8 @@ public class SocialActivity extends AppCompatActivity {
 
     private FirebaseAuth authTest;
     private DatabaseReference mDatabase;
-    private static final String FIREBASE_USERS = "users";
+    private static final String firebaseUsers = "users";
+    private static final String firebaseAccounts = "message";
 
     String userEmail;
     String allBoredPeople = "loading$";
@@ -92,9 +93,10 @@ public class SocialActivity extends AppCompatActivity {
             allBoredPeople = allBoredPeople.replace(userEmail+"$","");
         }
 
-        DatabaseReference myRef = database.getReference(FIREBASE_USERS);
+        DatabaseReference myRef = database.getReference(firebaseUsers);
         if(boredOrNot) {
             myRef.child("bored").setValue(userEmail+"$"+allBoredPeople);
+            allBoredPeople = userEmail+"$"+allBoredPeople;
         } else {
             myRef.child("bored").setValue(allBoredPeople);
         }
@@ -116,7 +118,7 @@ public class SocialActivity extends AppCompatActivity {
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                allBoredPeople = dataSnapshot.child(FIREBASE_USERS).child("bored").getValue(String.class);
+                allBoredPeople = dataSnapshot.child(firebaseUsers).child("bored").getValue(String.class);
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -140,7 +142,6 @@ public class SocialActivity extends AppCompatActivity {
         AdapterView.OnItemClickListener boredListener = new BoredListener();
 
         viewList.setOnItemClickListener(boredListener);
-
     }
 
 //    Clicking on a bored user will lead to the profile of the user, for further actions
@@ -161,7 +162,7 @@ public class SocialActivity extends AppCompatActivity {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                allBoredPeople = dataSnapshot.child(FIREBASE_USERS).child("bored").getValue(String.class);
+                allBoredPeople = dataSnapshot.child(firebaseUsers).child("bored").getValue(String.class);
             }
 
             @Override

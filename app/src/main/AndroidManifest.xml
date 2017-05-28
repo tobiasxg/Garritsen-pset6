@@ -21,10 +21,6 @@
             android:label="@string/title_activity_social"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".LoadActivity"
-            android:label="@string/title_activity_load"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".SignupActivity"
             android:label="@string/title_activity_signup"
             android:theme="@style/AppTheme.NoActionBar" />
