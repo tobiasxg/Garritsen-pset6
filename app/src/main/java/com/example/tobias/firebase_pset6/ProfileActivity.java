@@ -170,10 +170,9 @@ public class ProfileActivity extends AppCompatActivity {
         if (messageDatabase.length() > 7) {
             createListView();
             adapter.notifyDataSetChanged();
-
-            Button sendButton = (Button) findViewById(R.id.button2);
-            sendButton.setEnabled(true);
         }
+        Button sendButton = (Button) findViewById(R.id.button2);
+        sendButton.setEnabled(true);
     }
 
 
