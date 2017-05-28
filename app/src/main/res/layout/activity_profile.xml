@@ -56,6 +56,9 @@
             android:gravity="center"
             android:onClick="sendMessage"
             android:enabled="false"
+            android:textColor="@color/red"
+            android:background="@color/black"
+
             android:text="SEND" />
     </LinearLayout>
 

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/black"
     tools:context="com.example.tobias.firebase_pset6.MainActivity">
 
     <TextView
@@ -13,6 +14,7 @@
         android:text="Login"
         android:gravity="center"
         android:textSize="20dp"
+        android:textColor="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -22,14 +24,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Email: "
+        android:textColor="@color/red"
         android:textSize="30dp"/>
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="loginmail"
-        android:gravity="center"
         android:textSize="30dp"
+        android:textColor="@color/red"
+        android:textColorHint="@color/red"
         android:id="@+id/etname"/>
 
     <TextView
@@ -37,13 +41,17 @@
         android:layout_height="wrap_content"
         android:text="Password: "
         android:textSize="30dp"
+        android:textColor="@color/red"
+        android:textColorHint="@color/red"
         android:id="@+id/tvpass"/>
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="*********"
         android:textSize="30dp"
+        android:textColor="@color/red"
+        android:textColorHint="@color/red"
         android:id="@+id/etpass"/>
 
     <Button
@@ -51,6 +59,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/buttonSignup"
         android:text="Sign Up"
+        android:background="@color/red"
         android:onClick="createUser"/>
 
     <Button
@@ -58,17 +67,20 @@
         android:layout_height="wrap_content"
         android:id="@+id/buttonLogin"
         android:text="Log In"
+        android:background="@color/red"
         android:onClick="logIn"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Fast piet"
+        android:background="@color/red"
         android:onClick="fastLogIn2"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Fast tobi"
+        android:background="@color/red"
         android:onClick="fastLogIn3"/>
 
 

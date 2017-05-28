@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     public void createUser(View view) {
         Intent intent = new Intent(this, SignupActivity.class);
         startActivity(intent);
+        finish();
     }
 
 //    Log in by filling in email and password (both must be filled in)
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         logIn("piet@yahoo.nl", "1234567890");
         logIn(view);
     }
-    
+
 //    Easy log in button for testing. This is temporary and only for the demo.
     public void fastLogIn3(View view){
         logIn("tob@tobi.tg", "1234567890");

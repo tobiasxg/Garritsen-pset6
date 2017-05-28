@@ -14,8 +14,8 @@
         android:text="Who Is Bored"
         android:gravity="center"
         android:textSize="40dp"
-        android:textColor="@color/red"
-        android:background="@color/black"
+        android:textColor="@color/black"
+        android:background="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -27,14 +27,15 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:onClick="loadBoredPeopleButton"
-        android:textColor="@color/black"
-        android:background="@color/red"
+        android:textColor="@color/red"
+        android:background="@color/black"
         android:text="LOAD" />
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:id="@+id/boredList"
+        android:background="@color/red"
         android:layout_weight="1">
 
     </ListView>
@@ -50,6 +51,8 @@
         android:onClick="iAmBoredButton"
         android:id="@+id/boredBut"
         android:enabled="false"
+        android:textColor="@color/red"
+        android:background="@color/black"
         android:layout_weight="1"/>
 
         <Button
@@ -60,6 +63,8 @@
             android:onClick="iAmNotBoredButton"
             android:id="@+id/notBoredBut"
             android:enabled="false"
+            android:textColor="@color/red"
+            android:background="@color/black"
             android:layout_weight="1"/>
 
     </LinearLayout>
