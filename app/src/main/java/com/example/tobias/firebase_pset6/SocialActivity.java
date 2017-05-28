@@ -36,7 +36,6 @@ public class SocialActivity extends AppCompatActivity {
     private FirebaseAuth authTest;
     private DatabaseReference mDatabase;
     private static final String firebaseUsers = "users";
-    private static final String firebaseAccounts = "message";
 
     String userEmail;
     String allBoredPeople = "loading$";

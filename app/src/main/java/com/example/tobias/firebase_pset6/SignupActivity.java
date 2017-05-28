@@ -71,14 +71,14 @@ public class SignupActivity extends AppCompatActivity {
 
 
     public void createUser(View view){
-        EditText emailET = (EditText) findViewById(R.id.etmailreg);
-        EditText passET = (EditText) findViewById(R.id.etpassreg);
-        EditText usernameET = (EditText) findViewById(R.id.etnamereg);
+        EditText emailField = (EditText) findViewById(R.id.etmailreg);
+        EditText passField = (EditText) findViewById(R.id.etpassreg);
+        EditText usernameField = (EditText) findViewById(R.id.etnamereg);
 
-        email = emailET.getText().toString();
-        password = passET.getText().toString();
-        username = usernameET.getText().toString();
-        if(email.length() > 0 && password.length() > 0 && username.length() > 0) {
+        email = emailField.getText().toString();
+        password = passField.getText().toString();
+        username = usernameField.getText().toString();
+        if(email.length() > 0 && password.length() > 5 && username.length() > 0) {
 
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
