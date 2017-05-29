@@ -39,17 +39,17 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         mAuth = FirebaseAuth.getInstance();
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
+
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d("signed in", "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
+                if (user == null) {
                     // User is signed out
                     Log.d("signed out", "onAuthStateChanged:signed_out");
+                } else {
+                    // User is signed in
+                    Log.d("signed in", "onAuthStateChanged:signed_in:" + user.getUid());
                 }
             }
         };
