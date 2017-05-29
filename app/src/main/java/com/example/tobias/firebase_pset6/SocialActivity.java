@@ -159,19 +159,7 @@ public class SocialActivity extends AppCompatActivity {
 
 //    Update the ListView to the most recent found database
     public void updateListView(){
-        ValueEventListener postListener = new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                allBoredPeople = dataSnapshot.child(firebaseUsers).child("bored").getValue(String.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(SocialActivity.this, "Database Error", Toast.LENGTH_SHORT).show();
-            }
-        };
-        mDatabase.addValueEventListener(postListener);
+        getBoredPeople();
         createListView();
         adapter.notifyDataSetChanged();
     }
